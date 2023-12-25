@@ -1,10 +1,19 @@
 1. Before promise we used to depend on callback functions which would result in 1.) Callback Hell (Pyramid of doom) | 2.) Inversion of control
+
 2. Inversion of control is overcome by using promise.
   2.1) A promise is an object that represents eventual completion/failure of an asynchronous operation.
   2.2) A promise has 3 states: pending | fulfilled | rejected.
   2.3)  As soon as promise is fulfilled/rejected => It updates the empty object which is assigned undefined in pending state.
-  2.4) A promise resolves only once and it is immutable. 
+  2.4) A promise resolves only once and Promise Object it is IMMUTABLE. 
   2.5) Using .then() we can control when we call the cb(callback) function.
+  - If a callback function returns a value, then this value will be passed to next then() method as argument.
+- If a callback function throws an error, then this error will be passed to next catch() method as argument.
 
 3. To avoid callback hell (Pyramid of doom) => We use promise chaining. This way our code expands vertically instead of horizontally. Chaining is done using '.then()'
-4. A very common mistake that developers do is not returning a value during chaining of promises. Always remember to return a value. This returned value will be used by the next .then()
+
+4. If we use call-backs then we loose the control of program because, the API or the HOF controls our call-back function. This HOF or the API developed by someone  may invoke this call-back function for more than once or it may never invoke the call-back function. 
+This is called as "Inversion Of Control (IOC)".
+
+- But using then() method on the Promise Object invokes the call-back function for only once. By this way we don't lose the Control Of Program.
+
+4. A very common mistake that developers do is not returning a value from the call-back functions during chaining of promises. Always remember to return a value. This returned value will be used by the next .then() method.
