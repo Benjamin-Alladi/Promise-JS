@@ -41,6 +41,8 @@ To make it a bit complicated, what if after payment is done, you have to show Or
 api.showOrderSummary() and now it has dependency on api.proceedToPayment() Now my code should look
 something like this:
 
+createOrder-> proceedToPayment-> showOrderSummary-> updateWallets.
+
 api.createOrder(cart, function () {
   api.proceedToPayment(function () {
     api.showOrderSummary();
@@ -112,15 +114,3 @@ The finally() method of Promise instances schedules a function to be called when
 
 This lets you avoid duplicating code in both the promise's then() and catch() handlers.
 4. A very common mistake that developers do is not returning a value from the call-back functions during chaining of promises. Always remember to return a value. This returned value will be used by the next .then() method.
-
-cart= ["shirt", "pant", "tshirt"];
-
-createOrder-> proceedToPayment-> showOrderSummary-> updateWallet.
-
-api.createOrder(cart, function(){
-  api.proceedToPayment(function(){
-     api.showOrderSummary(function(){
-        api.updateWallet();
-     });
-  });
-});
