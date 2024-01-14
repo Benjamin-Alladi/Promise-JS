@@ -104,6 +104,13 @@ A common need is to execute two or more asynchronous operations or promises back
 then():
 Promise.then() takes two arguments, a callback for success and another for failure.
 Both are optional, so you can add a callback for success or failure only.
+
+The then() method in JavaScript always returns a new promise, regardless of whether you return a value from the callback function or not.
+
+*** If you don't return any value from the then() method in JavaScript, the new promise that the then() method returns will be resolved with an undefined value.
+In JavaScript, the then() method is used in conjunction with promises to handle asynchronous operations.
+
+*** When you return a value from the then() method, that value becomes the resolved value of the new promise that the then() method returns. This new promise is called the "child promise."
 Each .then() returns a newly generated promise object, which can optionally be used for chaining.
 
 catch():
