@@ -4,7 +4,7 @@
   2.1) A promise is an object that represents eventual completion/failure of an asynchronous operation.
   2.2) A promise has 3 states: pending | fulfilled | rejected.
   2.3)  As soon as promise is fulfilled/rejected => It updates the empty object which is assigned undefined in pending state.
-  2.4) A promise resolves only once and Promise Object it is IMMUTABLE. 
+  2.4) A promise resolves only once and Promise Object is IMMUTABLE. 
   2.5) Using .then() we can control when we call the cb(callback) function.
   - If a callback function returns a value, then this value will be passed to next then() method as argument.
 - If a callback function throws an error, then this error will be passed to next catch() method as argument.
@@ -16,4 +16,98 @@ This is called as "Inversion Of Control (IOC)".
 
 - But using then() method on the Promise Object invokes the call-back function for only once. By this way we don't lose the Control Of Program.
 
-4. A very common mistake that developers do is not returning a value from the call-back functions during chaining of promises. Always remember to return a value. This returned value will be used by the next .then() method.
+5. A very common mistake that developers do is not returning a value from the call-back functions during chaining of promises. Always remember to return a value. This returned value will be used by the next .then() method.
+
+Ex:
+Let us consider an E-commerce website that uses the APIs to create the order.
+
+let cart= [ob1, ob2, ob3];
+
+First createOrder() api function is called to create the order. After creating the order, user should be proceeded to the payment.
+Then the order summary has to be shown. Also wallet has to be updated.
+All these are dependent on each other.
+
+JS code:
+
+
+api.createOrder(cart, function () {
+api.proceedToPayment();
+});
+
+💡Over here `createOrder` api is first creating a order then it is responsible to call
+`api.proceedToPayment()` as part of callback approach.
+
+To make it a bit complicated, what if after payment is done, you have to show Order summary by calling
+api.showOrderSummary() and now it has dependency on api.proceedToPayment() Now my code should look
+something like this:
+
+api.createOrder(cart, function () {
+  api.proceedToPayment(function () {
+    api.showOrderSummary();
+  });
+});
+
+Now what if we have to update the wallet, now this will have a dependency over showOrderSummary
+
+api.createOrder(cart, function () {
+    api.proceedToPayment(function () {
+      api.showOrderSummary(function () {
+        api.updateWallet();
+      });
+    });
+});
+
+
+
+api.createOrder(cart, function(){
+  api.proceedToPayment(function(){
+    api.showOrderSummary( function(){ api.updateWallet()}); 
+  });
+});
+
+
+so, when the createOreder() is invoked it creates the order and runs the call-back function. This call-back function further calls proceedToPayment().
+When it is invoked, this further runs the call-back function. The call-back function further calls showOrderSummary.
+When it is invoked, the call-back functions is invoked, when executed it further calls updateWallet().
+
+Disadvantages:
+
+1. Call-back Hell:  When call-back functions take call-back functions take another function as call-back function, the code starts growing horizontally
+instead of vertically and this callback hell structure is also known as "PYRAMID OF DOOM".  This makes the code unreadable and unmaintainable.
+
+2. Inversion Of Control: Here the createOrder() function is taking the responsibility of invoking the call-back function that further calls proceedToPayment(). This means that createOrder() is taking the complete control and we are losing the Control of Program.
+
+So, Promises are used instead of Call-backs.
+
+Promise Chaining makes the code grow VERTICALLY. And we donot lose the Control Of Program.
+
+*** Promise: A Promise is an object representing the eventual completion or failure of an asynchronous operation.
+Promise Objects are immutable. It has 2 properties that can't be accessed. They are:
+
+1. promiseState: Initially a promise is said to be in Pending State and it can be in fulfilled or rejected state later.
+pending: initial state, neither fulfilled nor rejected.
+fulfilled: meaning that the operation was completed successfully.
+rejected: meaning that the operation failed.
+
+2. promiseResult: 
+While a Promise object is "pending" (working), the result is undefined.
+When a Promise object is "fulfilled", the result is a value.
+When a Promise object is "rejected", the result is an error object.
+
+
+Promise Chaining:
+
+A common need is to execute two or more asynchronous operations or promises back to back, where each subsequent operation starts when the previous operation succeeds, with the result from the previous step. In the old days, doing several asynchronous operations in a row would lead to the classic callback pyramid of doom.
+
+then():
+Promise.then() takes two arguments, a callback for success and another for failure.
+Both are optional, so you can add a callback for success or failure only.
+Each .then() returns a newly generated promise object, which can optionally be used for chaining.
+
+catch():
+The catch() method of Promise instances schedules a function to be called when the promise is rejected. It immediately returns an equivalent Promise object, allowing you to chain calls to other promise methods.
+
+finally():
+The finally() method of Promise instances schedules a function to be called when the promise is settled (either fulfilled or rejected). It immediately returns an equivalent Promise object, allowing you to chain calls to other promise methods.
+
+This lets you avoid duplicating code in both the promise's then() and catch() handlers.
