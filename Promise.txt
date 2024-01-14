@@ -111,3 +111,16 @@ finally():
 The finally() method of Promise instances schedules a function to be called when the promise is settled (either fulfilled or rejected). It immediately returns an equivalent Promise object, allowing you to chain calls to other promise methods.
 
 This lets you avoid duplicating code in both the promise's then() and catch() handlers.
+4. A very common mistake that developers do is not returning a value from the call-back functions during chaining of promises. Always remember to return a value. This returned value will be used by the next .then() method.
+
+cart= ["shirt", "pant", "tshirt"];
+
+createOrder-> proceedToPayment-> showOrderSummary-> updateWallet.
+
+api.createOrder(cart, function(){
+  api.proceedToPayment(function(){
+     api.showOrderSummary(function(){
+        api.updateWallet();
+     });
+  });
+});
