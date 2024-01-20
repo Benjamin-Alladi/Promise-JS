@@ -16,7 +16,7 @@ function h()
     p.then((v)=>console.log("Value: "+v),(e)=>console.log("Error: "+e));
     console.log("Second");
 }
-// h();
+h();
 
 async function f()
 {
@@ -26,7 +26,7 @@ async function f()
     console.log(v);
     console.log("Second aw");
 }
-// f();
+f();
 
 let p2= new Promise((resolve,reject)=>{
     setTimeout(()=>resolve(1000),10000);
@@ -40,9 +40,12 @@ async function fc()
     console.log("Hi2");
 
     console.log("Hi3");
+    let t1= performance.now();
     const v2= await p2;
+    let t2= performance.now();
     console.log("v2: "+v2);
     console.log("Hi4");
+    console.log((t2-t1)/1000);
 }
 fc();
 
